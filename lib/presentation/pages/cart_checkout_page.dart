@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:foodie_flow/application/order/order_bloc.dart';
 
 import '../../application/menu_cart/menu_cart_cubit.dart';
+// ADD THIS IMPORT
+import '../../domain/models/cart.dart';
 import '../theme/vibrant_bites_theme.dart';
 import '../widgets/quantity_stepper_vibrant.dart';
 
@@ -10,7 +13,6 @@ class CartCheckoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Cart page doesn't need restaurant argument - it works with cart state
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Cart', style: VibrantBites.headingLight),
@@ -20,7 +22,7 @@ class CartCheckoutPage extends StatelessWidget {
       ),
       body: BlocBuilder<MenuCartCubit, MenuCartState>(
         builder: (context, state) {
-          if (state.cart.isEmpty) {
+          if (state.cart.items.isEmpty) {
             return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -49,7 +51,9 @@ class CartCheckoutPage extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 16),
-                ...state.cart.items.map((ci) => _buildCartItem(context, ci)).toList(),
+                ...state.cart.items
+                    .map((ci) => _buildCartItem(context, ci))
+                    .toList(),
                 const SizedBox(height: 24),
                 _buildOrderSummary(state.cart.total, deliveryFee),
                 const SizedBox(height: 100), // Space for bottom button
@@ -64,18 +68,29 @@ class CartCheckoutPage extends StatelessWidget {
           return SafeArea(
             minimum: const EdgeInsets.all(VibrantBites.screenPadding),
             child: FilledButton(
-              onPressed: state.cart.isEmpty
+              onPressed: state.cart.items.isEmpty
                   ? null
                   : () {
-                      // Simplified payment flow - go directly to success screen
-                      Navigator.of(context).pushReplacementNamed('/order_result');
+                      final total =
+                          state.cart.total +
+                          (state.cart.total > 0 ? 2.50 : 0.0);
+
+                      final orderBloc = context.read<OrderBloc>();
+                      orderBloc.add(OrderPlaced(amount: total));
+
+                      Navigator.of(
+                        context,
+                      ).pushReplacementNamed('/order_result');
                     },
+
               style: FilledButton.styleFrom(
                 backgroundColor: VibrantBites.boldOrangeRed,
                 foregroundColor: VibrantBites.white,
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(VibrantBites.buttonBorderRadius),
+                  borderRadius: BorderRadius.circular(
+                    VibrantBites.buttonBorderRadius,
+                  ),
                 ),
               ),
               child: Text(
@@ -89,7 +104,8 @@ class CartCheckoutPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCartItem(BuildContext context, dynamic cartItem) {
+  // FIX: Changed 'dynamic' to 'CartItem' for type safety
+  Widget _buildCartItem(BuildContext context, CartItem cartItem) {
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: VibrantBites.screenPadding,
@@ -110,13 +126,22 @@ class CartCheckoutPage extends StatelessWidget {
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(VibrantBites.overlayButtonRadius),
+            borderRadius: BorderRadius.circular(
+              VibrantBites.overlayButtonRadius,
+            ),
             child: SizedBox(
               width: 64,
               height: 64,
+              // FIX: Replaced hardcoded URL with dynamic item image URL
               child: Image.network(
-                'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200',
+                cartItem.item.imageUrl,
                 fit: BoxFit.cover,
+                // Optional: Add error and loading builders for a better UX
+                loadingBuilder: (context, child, progress) => progress == null
+                    ? child
+                    : const Center(child: CircularProgressIndicator()),
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.fastfood_outlined),
               ),
             ),
           ),
@@ -127,7 +152,7 @@ class CartCheckoutPage extends StatelessWidget {
               children: [
                 Text(
                   cartItem.item.name,
-                  style: VibrantBites.headingMedium, // H4 - Small headings (16px)
+                  style: VibrantBites.headingMedium,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -144,9 +169,11 @@ class CartCheckoutPage extends StatelessWidget {
           ),
           QuantityStepperVibrant(
             quantity: cartItem.quantity,
-            onAddFromZero: () => context.read<MenuCartCubit>().addItem(cartItem.item),
+            onAddFromZero: () =>
+                context.read<MenuCartCubit>().addItem(cartItem.item),
             onAdd: () => context.read<MenuCartCubit>().addItem(cartItem.item),
-            onRemove: () => context.read<MenuCartCubit>().removeItem(cartItem.item),
+            onRemove: () =>
+                context.read<MenuCartCubit>().removeItem(cartItem.item),
           ),
         ],
       ),
@@ -156,7 +183,9 @@ class CartCheckoutPage extends StatelessWidget {
   Widget _buildOrderSummary(double subtotal, double deliveryFee) {
     final total = subtotal + deliveryFee;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: VibrantBites.screenPadding),
+      margin: const EdgeInsets.symmetric(
+        horizontal: VibrantBites.screenPadding,
+      ),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: VibrantBites.white,
@@ -194,7 +223,8 @@ class CartCheckoutPage extends StatelessWidget {
           child: Text(
             label,
             style: isTotal
-                ? VibrantBites.headingMedium // H4 - Small headings (16px)
+                ? VibrantBites
+                      .headingMedium // H4 - Small headings (16px)
                 : VibrantBites.bodyLarge, // 16px body text
           ),
         ),

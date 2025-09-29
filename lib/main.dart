@@ -30,9 +30,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => RestaurantListBloc(getRestaurants: sl<GetRestaurants>())),
-        BlocProvider(create: (_) => CategoryBloc(getItemsByCategory: sl<GetItemsByCategory>())),
-        BlocProvider(create: (_) => MenuCartCubit(getMenu: sl<GetMenu>(), restaurantId: '')),
+        BlocProvider(
+          create: (_) =>
+              RestaurantListBloc(getRestaurants: sl<GetRestaurants>()),
+        ),
+        BlocProvider(
+          create: (_) =>
+              CategoryBloc(getItemsByCategory: sl<GetItemsByCategory>()),
+        ),
+        BlocProvider(
+          create: (_) =>
+              MenuCartCubit(getMenu: sl<GetMenu>(), restaurantId: ''),
+        ),
         BlocProvider(create: (_) => OrderBloc(placeOrder: sl<PlaceOrder>())),
       ],
       child: MaterialApp(

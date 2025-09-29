@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../application/order/order_bloc.dart';
 import '../theme/vibrant_bites_theme.dart';
-import 'package:lottie/lottie.dart';
 
 class OrderResultPage extends StatelessWidget {
   const OrderResultPage({super.key});
@@ -13,7 +12,10 @@ class OrderResultPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: VibrantBites.creamyOffWhite,
       appBar: AppBar(
-        title: Text('Order Status', style: VibrantBites.headingLight.copyWith(fontSize: 18)),
+        title: Text(
+          'Order Status',
+          style: VibrantBites.headingLight.copyWith(fontSize: 18),
+        ),
         backgroundColor: VibrantBites.darkGrey,
         foregroundColor: VibrantBites.white,
       ),
@@ -24,7 +26,10 @@ class OrderResultPage extends StatelessWidget {
             case OrderStatus.processing:
               return const _Processing();
             case OrderStatus.success:
-              return _Success(orderId: state.order!.id, amount: state.order!.total);
+              return _Success(
+                orderId: state.order!.id,
+                amount: state.order!.total,
+              );
             case OrderStatus.failure:
               return _Failure(
                 message: state.failure?.message ?? 'Payment failed',
@@ -53,17 +58,19 @@ class _Processing extends StatelessWidget {
             height: 100,
             child: CircularProgressIndicator(
               strokeWidth: 6,
-              valueColor: AlwaysStoppedAnimation<Color>(VibrantBites.boldOrangeRed),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                VibrantBites.boldOrangeRed,
+              ),
             ),
           ),
           const SizedBox(height: 24),
           Text(
-            'Processing payment...',
+            'Processing order...',
             style: VibrantBites.headingBold.copyWith(fontSize: 18),
           ),
           const SizedBox(height: 8),
           Text(
-            'Please wait while we process your order',
+            'Please wait while we prepare your meal',
             style: VibrantBites.bodySecondaryDark,
           ),
         ],
@@ -90,36 +97,36 @@ class _Success extends StatelessWidget {
                 child: Column(
                   children: [
                     const SizedBox(height: 40),
-                    // Lottie success animation
-                    SizedBox(
-                      height: 200,
-                      child: Lottie.asset(
-                        'assets/animations/success.json',
-                        repeat: false,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
+
                     Text(
                       'Order Confirmed!',
                       style: VibrantBites.headingBold.copyWith(
                         fontSize: 28,
                         color: VibrantBites.boldOrangeRed,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
                     Text(
                       'Your delicious meal is on its way',
-                      style: VibrantBites.bodySecondaryDark.copyWith(fontSize: 16),
+                      style: VibrantBites.bodySecondaryDark.copyWith(
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
+
                     const SizedBox(height: 24),
+
+                    // Order ID
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         color: VibrantBites.boldOrangeRed.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: VibrantBites.boldOrangeRed.withOpacity(0.3),
-                        ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         'Order ID: $orderId',
@@ -129,12 +136,18 @@ class _Success extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 32),
+
+                    // Order Summary
                     Container(
+                      width: double.infinity,
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         color: VibrantBites.white,
-                        borderRadius: BorderRadius.circular(VibrantBites.cardBorderRadius),
+                        borderRadius: BorderRadius.circular(
+                          VibrantBites.cardBorderRadius,
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.08),
@@ -148,7 +161,9 @@ class _Success extends StatelessWidget {
                         children: [
                           Text(
                             'Order Summary',
-                            style: VibrantBites.headingBold.copyWith(fontSize: 20),
+                            style: VibrantBites.headingBold.copyWith(
+                              fontSize: 20,
+                            ),
                           ),
                           const SizedBox(height: 16),
                           Row(
@@ -169,26 +184,21 @@ class _Success extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: VibrantBites.warmYellow.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.access_time,
-                                  color: VibrantBites.boldOrangeRed,
-                                  size: 20,
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.access_time,
+                                color: VibrantBites.boldOrangeRed,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Estimated delivery: 25-30 mins',
+                                style: VibrantBites.bodyDark.copyWith(
+                                  fontSize: 14,
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Estimated delivery: 25-30 mins',
-                                  style: VibrantBites.bodyDark.copyWith(fontSize: 14),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -205,7 +215,9 @@ class _Success extends StatelessWidget {
                 foregroundColor: VibrantBites.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(VibrantBites.buttonBorderRadius),
+                  borderRadius: BorderRadius.circular(
+                    VibrantBites.buttonBorderRadius,
+                  ),
                 ),
               ),
               child: Text(
@@ -268,9 +280,14 @@ class _Failure extends StatelessWidget {
               style: FilledButton.styleFrom(
                 backgroundColor: VibrantBites.boldOrangeRed,
                 foregroundColor: VibrantBites.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(VibrantBites.buttonBorderRadius),
+                  borderRadius: BorderRadius.circular(
+                    VibrantBites.buttonBorderRadius,
+                  ),
                 ),
               ),
             ),

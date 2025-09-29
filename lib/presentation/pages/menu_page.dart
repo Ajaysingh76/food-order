@@ -32,7 +32,7 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)?.settings.arguments;
-    
+
     if (arguments == null || arguments is! Restaurant) {
       return Scaffold(
         appBar: AppBar(
@@ -43,7 +43,11 @@ class _MenuPageState extends State<MenuPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 64, color: VibrantBites.mediumGrey),
+              Icon(
+                Icons.error_outline,
+                size: 64,
+                color: VibrantBites.mediumGrey,
+              ),
               const SizedBox(height: 16),
               Text('Restaurant data not found', style: VibrantBites.bodyLarge),
               const SizedBox(height: 16),
@@ -56,14 +60,14 @@ class _MenuPageState extends State<MenuPage> {
         ),
       );
     }
-    
+
     final Restaurant restaurant = arguments;
-    
+
     // Load menu for this restaurant using the global MenuCartCubit
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<MenuCartCubit>().loadMenuForRestaurant(restaurant.id);
     });
-    
+
     return _MenuView(restaurant: restaurant);
   }
 }
@@ -88,7 +92,10 @@ class _MenuView extends StatelessWidget {
                 onRetry: () => context.read<MenuCartCubit>().loadMenu(),
               );
             case MenuCartStatus.loaded:
-              return _buildMenuContent(context, state.menu.first); // Show first item as detail
+              return _buildMenuContent(
+                context,
+                state.menu.first,
+              ); // Show first item as detail
           }
         },
       ),
@@ -136,7 +143,11 @@ class _MenuView extends StatelessWidget {
                 ],
               ),
               child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: VibrantBites.white, size: 20),
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: VibrantBites.white,
+                  size: 20,
+                ),
                 onPressed: () => Navigator.of(context).pop(),
                 padding: EdgeInsets.zero,
               ),
@@ -162,14 +173,23 @@ class _MenuView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(Icons.share, color: VibrantBites.white, size: 20),
+                  child: const Icon(
+                    Icons.share,
+                    color: VibrantBites.white,
+                    size: 20,
+                  ),
                 ),
                 const SizedBox(width: VibrantBites.smallSpacing),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: VibrantBites.charcoal.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(VibrantBites.overlayButtonRadius),
+                    borderRadius: BorderRadius.circular(
+                      VibrantBites.overlayButtonRadius,
+                    ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
@@ -221,10 +241,15 @@ class _MenuView extends StatelessWidget {
               ),
               const SizedBox(height: VibrantBites.smallSpacing),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: VibrantBites.warmYellow.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(VibrantBites.overlayButtonRadius),
+                  borderRadius: BorderRadius.circular(
+                    VibrantBites.overlayButtonRadius,
+                  ),
                   border: Border.all(
                     color: VibrantBites.warmYellow.withOpacity(0.5),
                     width: 1,
@@ -243,18 +268,13 @@ class _MenuView extends StatelessWidget {
                 children: [
                   Text(
                     '\$${item.price.toStringAsFixed(2)}',
-                    style: VibrantBites.priceText, // Prominent price text (32px)
+                    style:
+                        VibrantBites.priceText, // Prominent price text (32px)
                   ),
                   const Spacer(),
-                  Text(
-                    '200 Cal.',
-                    style: VibrantBites.bodySecondaryDark,
-                  ),
+                  Text('200 Cal.', style: VibrantBites.bodySecondaryDark),
                   const SizedBox(width: VibrantBites.elementSpacing),
-                  Text(
-                    'Origin: US',
-                    style: VibrantBites.bodySecondaryDark,
-                  ),
+                  Text('Origin: US', style: VibrantBites.bodySecondaryDark),
                 ],
               ),
               const SizedBox(height: VibrantBites.elementSpacing),
@@ -313,7 +333,10 @@ class _MenuView extends StatelessWidget {
                         value: cubit,
                         child: const CartCheckoutPage(),
                       ),
-                      settings: RouteSettings(name: '/checkout', arguments: restaurant),
+                      settings: RouteSettings(
+                        name: '/checkout',
+                        arguments: restaurant,
+                      ),
                     ),
                   );
                 },
@@ -322,7 +345,9 @@ class _MenuView extends StatelessWidget {
                   foregroundColor: VibrantBites.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(VibrantBites.buttonBorderRadius),
+                    borderRadius: BorderRadius.circular(
+                      VibrantBites.buttonBorderRadius,
+                    ),
                   ),
                 ),
                 child: Text(
@@ -338,7 +363,6 @@ class _MenuView extends StatelessWidget {
   }
 }
 
-
 class _ErrorView extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
@@ -352,7 +376,11 @@ class _ErrorView extends StatelessWidget {
         children: [
           Text(message),
           const SizedBox(height: 12),
-          FilledButton.icon(onPressed: onRetry, icon: const Icon(Icons.refresh), label: const Text('Retry')),
+          FilledButton.icon(
+            onPressed: onRetry,
+            icon: const Icon(Icons.refresh),
+            label: const Text('Retry'),
+          ),
         ],
       ),
     );
