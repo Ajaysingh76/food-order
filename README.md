@@ -52,16 +52,17 @@ Test files:
 - `test/order_bloc_test.dart`
 
 ## Screenshots
-<img src="docs/screenshots/main.jpeg" alt="Home Screen" width="300"/>
+## Screenshots
+
+### Home
+<img src="https://github.com/Ajaysingh76/food-order/blob/main/doc/screenshot/main.jpeg?raw=true" alt="Home Screen" width="300"/>
 
 ### Menu
-<img src="docs/screenshots/detail.jpeg" alt="Menu Screen" width="300"/>
+<img src="https://github.com/Ajaysingh76/food-order/blob/main/doc/screenshot/detail.jpeg?raw=true" alt="Menu Screen" width="300"/>
 
-### Checkout
-<img src="docs/screenshots/cartitem.jpeg" alt="Checkout Screen" width="300"/>
-
-<img src="docs/screenshots/order.jpeg" alt="Checkout Screen" width="300"/>
-Place screenshots here (optional): `docs/screenshots/`
+### Checkout & Order
+<img src="https://github.com/Ajaysingh76/food-order/blob/main/doc/screenshot/cartitem.jpeg?raw=true" alt="Checkout Screen" width="300"/>
+<img src="https://github.com/Ajaysingh76/food-order/blob/main/doc/screenshot/order.jpeg?raw=true" alt="Order Confirmation Screen" width="300"/>
 
 ## Notes
 
